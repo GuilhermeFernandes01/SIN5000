@@ -73,6 +73,8 @@
 \usepackage{algorithm}			%para ilustrações do tipo algoritmo
 \usepackage{mdwlist}			%para itens com espaço padrão da abnt
 \usepackage[noend]{algpseudocode}			%para ilustrações do tipo algoritmo
+\usepackage{chemformula} % para escrever CO2 corretamente
+\usepackage{longtable} % para tab elas longas
 		
 % ---
 % Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
@@ -371,7 +373,7 @@ A computação em nuvem surgiu como uma solução para um dos maiores desafios d
 
 Dentro desse paradigma, as plataformas de computação em nuvem geralmente oferecem serviços em três diferentes níveis: IaaS (\textit{Infrastructure as a Service}), PaaS (\textit{Platform as a Service}) e SaaS (\textit{Software as a Service}), como descrito por \citeonline{4738445}. No nível IaaS, a plataforma fornece aos usuários acesso a recursos de \textit{hardware}, como processamento e armazenamento, cobrando de acordo com a utilização. Exemplos de serviços nesse nível incluem o Amazon EC2 (\textit{Elastic Cloud Computing}) e o Amazon S3 (\textit{Simple Storage Service}). No nível PaaS, o provedor oferece um ambiente completo para desenvolvimento, teste e implantação de aplicações, exigindo que os desenvolvedores sigam um modelo de desenvolvimento predefinido, aceitando algumas restrições em troca da escalabilidade oferecida, como no caso do Azure App Service. Por fim, no nível SaaS, aplicações específicas são disponibilizadas aos usuários por meio da \textit{internet}, com a cobrança proporcional ao uso do aplicativo. Exemplos incluem o Google Drive e o YouTube.
 
-As plataformas modernas de computação em nuvem são compostas por diversos \textit{data centers} geograficamente distribuídos ao redor do mundo. A Figura \ref{fig:microsoft-datacenters}, por exemplo, ilustra as localizações dos \textit{data centers} da Azure, da Microsoft, que somam milhões de servidores físicos \citeonline{john_roach_2021_microsoft_azure}. Essa infraestrutura geodistribuída é fundamental para atender à crescente demanda global de usuários, além de reduzir significativamente o tempo de resposta das aplicações, uma vez que a proximidade física dos servidores em relação aos usuários finais melhora a latência. A geodistribuição também oferece vantagens em termos de segurança e redundância. Se um \textit{data center} em uma determinada região ficar indisponível devido a falhas de energia, desastres naturais ou ataques cibernéticos, outro \textit{data center} em uma região distinta pode assumir temporariamente a carga computacional, assegurando a continuidade dos serviços.
+As plataformas modernas de computação em nuvem são compostas por diversos \textit{data centers} geodistribuídos. A Figura \ref{fig:microsoft-datacenters}, por exemplo, ilustra as localizações dos \textit{data centers} da Azure, da Microsoft, que somam milhões de servidores físicos \citeonline{john_roach_2021_microsoft_azure}. Essa infraestrutura geodistribuída é fundamental para atender à crescente demanda global de usuários, além de reduzir significativamente o tempo de resposta das aplicações, uma vez que a proximidade física dos servidores em relação aos usuários finais melhora a latência. A geodistribuição também oferece vantagens em termos de segurança e redundância. Se um \textit{data center} em uma determinada região ficar indisponível devido a falhas de energia, desastres naturais ou ataques cibernéticos, outro \textit{data center} em uma região distinta pode assumir temporariamente a carga computacional, assegurando a continuidade dos serviços.
 
 \begin{figure}[htbp]
 	\centering
@@ -449,7 +451,200 @@ No contexto desta dissertação, $\alpha$ representa os recursos computacionais 
 %-------------------------------------------------------------------------
 \chapter{Protocolo da revisão do estado da arte}
 
+\section{Tema da revisão}\label{section:tema-da-revisao}
+
+A revisão aborda a otimização da migração de VMs em \textit{data centers} geodistribuídos, com o propósito de minimizar o impacto ambiental e melhorar a eficiência operacional. O foco é reduzir as emissões de \ch{CO2}, o \textit{downtime} das aplicações e o congestionamento de rede, além de otimizar o uso de fontes de energia de baixa intensidade de carbono. A revisão busca também avaliar como a combinação de diferentes algoritmos e técnicas de migração pode contribuir para alcançar uma operação mais sustentável e eficiente em cenários com energia renovável parcial ou total.
+
+\section{Tipo de revisão}\label{section:tipo-de-revisao}
+
+Esta revisão será conduzida no formato de revisão de escopo. Uma revisão de escopo é um tipo de revisão que busca mapear a literatura científica disponível sobre um tema específico, identificando as principais abordagens, lacunas e tendências na área de pesquisa. É mais abrangente que a abordagem sistemática, com o objetivo de fornecer uma visão geral do campo de estudo e descrever a amplitude dos tópicos abordados.
+
+A escolha pela revisão de escopo se justifica pela necessidade de explorar diversas estratégias e técnicas de migração de VMs em \textit{data centers} geodistribuídos, considerando os muitos aspectos que impactam a eficiência energética, sustentabilidade e desempenho operacional. Dado o caráter multidisciplinar e a constante evolução tecnológica no tema, é essencial mapear o estado atual da literatura para identificar lacunas no conhecimento e oportunidades para futuros desenvolvimentos. Dessa forma, a revisão de escopo servirá como uma base estruturada para direcionar pesquisas futuras e propor novas abordagens na minimização de emissões de carbono e na otimização da migração de VMs em ambientes \textit{cloud} sustentáveis.
+
+\section{Questões de pesquisa}\label{section:questoes-de-pesquisa}
+Considerando a necessidade de uma revisão de escopo, um conjunto de questões de pesquisa foi definido para este trabalho. Essas questões estão voltadas para explorar as práticas e técnicas de migração de VMs em \textit{data centers} geodistribuídos, especialmente no contexto da minimização das emissões de \ch{CO2} e da otimização do uso de fontes de energia de baixa intensidade de carbono. O principal interesse deste estudo é identificar e avaliar os trabalhos que abordam essas técnicas e estratégias, visando uma compreensão abrangente da área de pesquisa. Através dessas questões, busca-se não apenas mapear as abordagens existentes, mas também destacar as lacunas na literatura que podem ser exploradas em investigações futuras.
+
+\textbf{Q1}: Quais são as principais estratégias e algoritmos propostos na literatura para a migração de VMs com foco na redução de emissões de \ch{CO2} em \textit{data centers} geodistribuídos?
+
+A finalidade desta questão é identificar as principais estratégias e algoritmos que têm sido abordados na literatura sobre migração de VMs, especialmente aqueles voltados para a minimização das emissões de \ch{CO2} em \textit{data centers} geodistribuídos. Para esta questão, foram consideradas as categorias de migração, incluindo migração baseada em \textit{threshold} e otimização multiobjetivo.
+
+\textbf{Q2}: Quais são os impactos das diferentes técnicas de migração de VMs no \textit{downtime} das aplicações e no congestionamento de rede em ambientes geodistribuídos?
+
+A finalidade desta questão é avaliar os impactos que as diversas técnicas de migração de VMs têm no \textit{downtime} das aplicações e no congestionamento da rede, considerando o contexto de \textit{data centers} geodistribuídos. Para esta análise, serão utilizadas métricas de desempenho relatadas na literatura, como tempo médio de migração e latência de rede, permitindo uma comparação sistemática. A escolha dessas métricas se justifica pela relevância que têm na qualidade do serviço prestado, além de sua aplicabilidade em diferentes cenários operacionais.
+
+\textbf{Q3}: Em que medida a utilização de fontes de energia de baixa intensidade de carbono influencia a eficácia das técnicas de migração para reduzir as emissões de \ch{CO2}?
+
+A finalidade desta questão é investigar como a utilização de fontes de energia de baixa intensidade de carbono influencia a eficácia das técnicas de migração de VMs na redução das emissões de \ch{CO2}. Para abordar esta questão, serão analisados estudos que consideram diferentes tipos de fontes energéticas e seus impactos nas técnicas de migração. A correlação entre a intensidade de carbono das fontes energéticas e a eficiência das técnicas será avaliada, destacando os cenários em que essas técnicas se mostram mais eficazes. Essa abordagem é relevante, pois permite uma compreensão mais clara de como a escolha da fonte de energia pode otimizar a operação dos \textit{data centers} em termos de sustentabilidade.
+
+\section{Bases de dados usadas}\label{section:bases-de-dados-usadas}
+
+A única base de dados utilizada para a realização do protocolo de revisão foi o Scopus, por ser bem estabelecida como a maior base de dados de literatura revisada por pares. Devido ao grande número de bases de dados indexadas pelo Scopus, esta revisão de escopo também abrangeu universidades editoras e outras associações científicas. Pesquisas diretas no IEEE, ACM ou bibliotecas Springer, por exemplo, seriam redundantes e, portanto, desnecessárias.
+
+\section{String de busca}\label{section:string-de-busca}
+
+Foi criada uma \textit{string} de busca contendo palavras-chave relacionadas à migração ao vivo de máquinas virtuais em \textit{datacenters} geodistribuidos com foco em computação sustentável. A sequência de busca compreende disjunções de termos genéricos com agrupamentos incluídos na literatura especializada. Além disso, a sequência de busca possui uma segunda parte destinada a filtrar apenas por artigos especificamente que mencionem máquinas virtuais e não sejam de computação de borda ou em névoa. Uma representação para a \textit{string} de busca é fornecida na Tabela \ref{tab:StringDeBusca}.
+
+\begin{table}[htbp]
+	\centering
+	\caption{\textit{String} de busca}
+		\begin{tabular}{p{6in} } \hline
+			("virtual machine" OR vm) AND "live migration" AND (("energy*" OR "power*") AND ("saving" OR "optimization" OR "aware" OR "efficiency")) AND ("cloud" OR "data center") AND ("sustainable computing" OR "green computing") AND NOT ("fog computing" OR "edge computing") AND NOT TITLE(consolidation)
+		\end{tabular}
+	\label{tab:StringDeBusca}
+\end{table}
+
+\section{Estratégia de seleção de estudos primários}\label{section:estrategia-de-selecao-de-estudos-primarios}
+
+Como resultados falso-positivos podem ser retornados devido ao amplo espectro da \textit{string} de busca, esses resultados precisam ser verificados.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Critério de Inclusão (CI)}
+		\begin{tabular}{p{1in} p{5in} } \hline
+
+		CI-1	& O principal objetivo da pesquisa ou um dos objetivos específicos do estudo é a otimização de uma ou mais métricas de gerenciamento de máquinas virtuais em \textit{datacenters} geodistribuidos \\
+		CI-2	& O estudo aborda a aplicação de técnicas para otimização de uma ou mais métricas de gerenciamento de máquinas virtuais em \textit{datacenters} geodistribuidos e discute os resultados de sua aplicação \\ \hline
+
+		\end{tabular}
+	\label{tab:TabelaCriteriosInclusao}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+	\caption{Critério de Exclusão (CE)}
+		\begin{tabular}{p{1in} p{5in} } \hline
+
+		CE-1	& O estudo não está completamente em inglês \\
+		CE-2	& O estudo não está relacionado a ciência da computação, sistemas de informação, engenharia ou campo fortemente relacionado \\
+		CE-3	& O estudo não é primário \\ \hline
+
+		\end{tabular}
+	\label{tab:TabelaCriteriosExclusao}
+\end{table}
+
+As Tabelas \ref{tab:TabelaCriteriosInclusao} e \ref{tab:TabelaCriteriosExclusao} apresentam, respectivamente, os Critérios de Inclusão (CI) e os Critérios de Exclusão (CE) definido para esta verificação. Para que um estudo seja selecionado como estudo primário, deve atender a todos os critérios de inclusão e a nenhum critério de exclusão.
+
+\section{Estratégia para extração de dados e para síntese de resultados}\label{section:estrategia-para-extracao-de-dados-e-para-sintese-de-resultados}
+
+Os artigos selecionados para inclusão foram lidos em completo para extração de resultados. A leitura foi orientada pelas questões de pesquisa (\ref{section:questoes-de-pesquisa}). Durante a leitura, foram copiados trechos de artigos que auxiliavam a responder às questões de pesquisa para controlar planilhas. O conjunto de trechos referentes a cada questão de pesquisa respaldada tanto a elaboração das respostas correspondentes como a reunião dos pontos fortes e pontos fracos do estado da arte em gerenciamento de máquinas virtuais em \textit{datacenters} geodistribuidos com foco em computação sustentável.
+
 \chapter{Resultados da condução da revisão estado da arte}
+
+\section{Relato da condução}\label{section:relato-da-conducao}
+
+Para encontrar estudos candidatos para estudos primários, a \textit{string} de busca foi aplicada sobre os campos título, resumo e palavras-chave, no mecanismo de busca Scopus. A \textit{string} base (\ref{tab:StringDeBusca}) foi ampliada com filtros adicionais que permitiram a aplicação automática da exclusão critérios CE-1 e CE-2 para restringir o idioma de escrita (somente em inglês), bem como os campos em que os trabalhos poderiam estar associados (ciências da computação e engenharia). Esta fase foi realizada em outubro de 2024 e resultou em 408 estudos candidatos.
+
+Dos 408 artigos, 27 foram excluídos pelo critério CE-3 e outros 342 não atenderam a nenhum critério de inclusão; desta forma, restaram 38 artigos.
+
+\begin{figure}[htbp]
+	\centering
+	\caption{Processo de seleção dos artigos primários}
+		\includegraphics[width=.3\linewidth]{images/seleção-dos-artigos-primários.png}
+	\label{fig:seleção-dos-artigos-primários}
+  \source{Autor (2024)}
+\end{figure}
+
+\section{Tabela com os artigos primários selecionados}\label{section:tabela-com-os-artigos-primarios-selecionados}
+
+A Tabela \ref{tab:EstudosPrimariosSelecionados} contempla os artigos primários selecionados.
+
+\begin{longtable}{|p{3in}|p{2in}|p{1in}|}
+	\caption{Estudos primários selecionados}
+	\label{tab:EstudosPrimariosSelecionados} \\
+	\hline
+	\textbf{Título} & \textbf{Autores (Ano de publicação)} \\
+	\hline
+	Quality of service modeling for green scheduling in Clouds & \citeonline{Guérout2014225} \\
+	\hline 
+	Evaluating impact of live migration on data center energy saving & \citeonline{Akiyama2015759} \\
+	\hline 
+	A cloud computing resource scheduling policy based on genetic algorithm with multiple fitness & \citeonline{Chen2012177} \\
+	\hline 
+	Reduce VM migration in bandwidth oversubscribed cloud data centres & \citeonline{Shahzad2015140} \\
+	\hline 
+	Traffic-aware virtual machine migration scheduling problem in geographically distributed data centers & \citeonline{Teyeb2016798} \\
+	\hline
+	A computation- Network-Aware energy optimization model for virtual machines allocation & \citeonline{Canali201743} \\
+	\hline
+	Heuristic algorithms for energy and performance dynamic optimization in cloud computing & \citeonline{Guo20171335} \\
+	\hline
+	Carbon efficient VM placement and migration technique for green federated cloud datacenters & \citeonline{Wadhwa20142297} \\
+	\hline
+	Dynamic Virtual Machine migration algorithms using enhanced energy consumption model for green cloud data centers & \citeonline{Huang2014902} \\
+	\hline
+	Dynamic resource management using virtual machine migrations & \citeonline{Mishra201234} \\
+	\hline
+	Energy-Efficient Thermal-Aware Autonomic Management of Virtualized HPC Cloud Infrastructure & \citeonline{Rodero2012447} \\
+	\hline
+	Live migration of multiple virtual machines with resource reservation in cloud computing environments & \citeonline{Ye2011267} \\
+	\hline
+	Hybrid soft computing approach for energy efficiency in cloud computing & \citeonline{Jasuja2016} \\
+	\hline
+	Service-Oriented Virtual Machine Placement Optimization for Green Data Center & \citeonline{Tseng2015556} \\
+	\hline
+	Online virtual machine migration for renewable energy usage maximization in geographically distributed cloud data centers & \citeonline{Khosravi2017} \\
+	\hline
+	Type-aware virtual machine management for energy efficient cloud data centers & \citeonline{Al-Dulaimy2018185} \\
+	\hline
+	Live Migration for Multiple Correlated Virtual Machines in Cloud-Based Data Centers & \citeonline{Sun2018279} \\
+	\hline
+	An algorithm for network and data-aware placement of multi-tier applications in cloud data centers & \citeonline{Ferdaus201765} \\
+	\hline
+	Energy efficient temporal load aware resource allocation in cloud computing datacenters & \citeonline{Vakilinia2018} \\
+	\hline
+	Challenges in green computing for energy saving techniques & \citeonline{More201773} \\
+	\hline
+	PAPSO: A power-aware VM placement technique based on particle swarm optimization & \citeonline{Ibrahim202081747} \\
+	\hline
+	Energy aware virtual machine scheduling in data centers & \citeonline{Qiu2019} \\
+	\hline
+	A Strategy for Live Migration of Virtual Machines in a Cloud Federation & \citeonline{Addya20192877} \\
+	\hline
+	Memory-aware resource management algorithm for low-energy cloud data centers & \citeonline{Liang2020329} \\
+	\hline
+	VMSAGE: A virtual machine scheduling algorithm based on the gravitational effect for green Cloud computing & \citeonline{Xu201987} \\
+	\hline
+	Energy-aware virtual machine allocation and selection in cloud data centers & \citeonline{DineshReddy20191917} \\
+	\hline
+	An Energy-Aware Combinatorial Virtual Machine Allocation and Placement Model for Green Cloud Computing & \citeonline{Gamsiz202118625} \\
+	\hline
+	An approach toward design and development of an energy-aware VM selection policy with improved SLA violation in the domain of green cloud computing & \citeonline{Mandal20207374} \\
+	\hline
+	An Energy-Efficient Dynamic Resource Management Approach Based on Clustering and Meta-Heuristic Algorithms in Cloud Computing IaaS Platforms: Energy Efficient Dynamic Cloud Resource Management & \citeonline{AskarizadeHaghighi20191367} \\
+	\hline
+	Energy and carbon-aware initial VM placement in geographically distributed cloud data centers & \citeonline{Khodayarseresht2023} \\
+	\hline
+	VM Scheduling for Efficient Dynamically Migrated Virtual Machines (VMS-EDMVM) in Cloud Computing Environment & \citeonline{Supreeth20221892} \\
+	\hline
+	A Service Sustainable Live Migration Strategy for Multiple Virtual Machines in Cloud Data Centers & \citeonline{Satpathy2021} \\
+	\hline
+	Preserving Resource Handiness and Exigency-Based Migration Algorithm (PRH-EM) for Energy Efficient Federated Cloud Management Systems & \citeonline{Karthikeyan2023} \\
+	\hline
+	Power efficient virtual machine placement in cloud data centers with a discrete and chaotic hybrid optimization algorithm & \citeonline{Gharehpasha20211293} \\
+	\hline
+	MECpVmS: an SLA aware energy-efficient virtual machine selection policy for green cloud computing & \citeonline{Mandal2023651} \\
+	\hline
+\end{longtable}
+
+\section{Análise descritiva}\label{section:analise-descritiva}
+
+Através da Figura \ref{fig:artigos-por-ano} é possivel perceber que o interesse científico pelo assunto, desde que surgiu, é constante.
+\begin{figure}[htbp]
+	\centering
+	\caption{Distribuição dos artigos selecionados no tempo}
+		\includegraphics[width=\linewidth]{images/artigos-por-ano.png}
+	\label{fig:artigos-por-ano}
+  \source{Autor (2024)}
+\end{figure}
+
+A maior parte dos artigos selecionados foram publicados em periódicos, conforme mostra a Figura \ref{fig:local-de-publicação-do-artigo}.
+\begin{figure}[htbp]
+	\centering
+	\caption{Local de publicação dos artigos selecionados}
+		\includegraphics[width=\linewidth]{images/local-de-publicação-do-artigo.png}
+	\label{fig:local-de-publicação-do-artigo}
+  \source{Autor (2024)}
+\end{figure}
 
 \end{apendicesenv}
 % ---
