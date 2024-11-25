@@ -74,7 +74,8 @@
 \usepackage{mdwlist}			%para itens com espaço padrão da abnt
 \usepackage[noend]{algpseudocode}			%para ilustrações do tipo algoritmo
 \usepackage{chemformula} % para escrever CO2 corretamente
-\usepackage{longtable} % para tab elas longas
+\usepackage{longtable} % para tabelas longas
+\usepackage{pgfgantt}
 		
 % ---
 % Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
@@ -271,6 +272,7 @@ Projeto de pesquisa para exame de qualificação apresentado à Escola de Artes,
 %-------------------------------------------------------------------------
 \begin{siglas}
   \item[CRC] \textit{Carbon-responsive computing}
+  \item[DC] \textit{Data center}
   \item[IaaS] \textit{Infrastructure as a Service}
   \item[PaaS] \textit{Platform as a Service}
   \item[SaaS] \textit{Software as a Service}
@@ -328,28 +330,143 @@ Projeto de pesquisa para exame de qualificação apresentado à Escola de Artes,
 %
 %-------------------------------------------------------------------------
 \chapter{Introdução}
+A computação em nuvem desempenha um papel central na sociedade moderna, sustentando desde atividades cotidianas até operações críticas em grandes corporações e governos. À medida que a adoção de serviços de nuvem cresce, os \textit{data centers} (DCs) tornaram-se essenciais para essa infraestrutura. No entanto, esse avanço traz desafios significativos, especialmente relacionados ao consumo energético e às emissões de \ch{CO2}. A sustentabilidade desse crescimento depende de inovações que conciliem eficiência operacional e redução de impactos ambientais.
+
+Um dos problemas críticos enfrentados é o alto consumo energético de DCs, intensificado pela dependência de fontes de energia de alta intensidade de carbono em diversas regiões. Para abordar esses desafios, estratégias como a migração de máquinas virtuais (VMs) têm ganhado destaque, oferecendo uma forma de otimizar recursos e priorizar o uso de fontes de energia renováveis.
+
+Este trabalho propõe investigar como algoritmos para a migração de VMs podem ser desenvolvidos e otimizados para reduzir as emissões de carbono, mitigar problemas como \textit{downtime} de aplicações e congestionamento de rede, e maximizar o uso de energia limpa em data centers geograficamente distribuídos. Para isso, serão desenvolvidas e realizadas simulações computacionais utilizando métricas padronizadas para avaliar a eficiência de diferentes abordagens.
 
 \section{Contextualização}
+A computação em nuvem tornou-se uma infraestrutura essencial para atender às demandas crescentes da sociedade moderna. Com o aumento exponencial de dados e serviços, os data centers (DCs) desempenham um papel crucial nesse ecossistema. Entre 2010 e 2018, as demandas de DCs cresceram substancialmente, com aumentos significativos no tráfego IP, armazenamento e carga de trabalho, conforme \citeonline{doi:10.1126/science.aba3758}. Apesar dos avanços na eficiência energética, projeções futuras indicam cenários preocupantes de aumento no consumo energético, especialmente em regiões onde fontes de energia de alta intensidade de carbono predominam \cite{KOOT2021116798}.
+
+Paralelamente, eventos globais como a pandemia de COVID-19 demonstraram a vulnerabilidade do setor a mudanças repentinas na demanda, intensificando a pressão sobre as infraestruturas de DCs, de acordo com \citeonline{10.1145/3419394.3423658}. Essa pressão evidencia a necessidade de soluções tecnológicas que integrem eficiência operacional e sustentabilidade ambiental.
+
+Nesse contexto, a migração de VMs surge como uma solução promissora. Ela permite a alocação dinâmica de cargas de trabalho em DCs que utilizam energia limpa, reduzindo as emissões de carbono associadas. Contudo, essa abordagem apresenta desafios técnicos, como downtime de aplicações, congestionamento de rede e eficiência operacional, que devem ser cuidadosamente equilibrados para maximizar seus benefícios.
 
 \section{Justificativa}
+A crescente demanda por serviços de computação em nuvem tem levado a uma expansão significativa na utilização de DCs, acompanhada de impactos ambientais consideráveis. Apesar dos avanços na eficiência energética, como destacado por \citeonline{doi:10.1126/science.aba3758}, o crescimento contínuo das cargas de trabalho e do tráfego digital impede uma redução efetiva do consumo energético global. Isso se agrava devido à dependência de fontes de energia de alta intensidade de carbono em muitas regiões, como a Virgínia, que processa grande parte do tráfego de internet dos EUA e utiliza predominantemente fontes fósseis \cite{clicking_clean_virginia}.
+
+Essa realidade evidencia lacunas importantes no setor. Primeiro, enquanto estratégias para melhorar a eficiência energética são bem documentadas, há pouca padronização na avaliação de técnicas voltadas à redução de emissões de carbono em DCs. Isso dificulta a comparação objetiva entre algoritmos e impede a replicabilidade de experimentos existentes. Segundo, soluções como a migração de VMs apresentam potencial para minimizar emissões de \ch{CO2} ao alocar cargas de trabalho para locais que utilizam energia de baixa intensidade de carbono. No entanto, a literatura atual é limitada em estudos que combinem algoritmos ou avaliem estratégias híbridas de forma sistemática, deixando uma lacuna relevante a ser explorada.
+
+Além disso, questões práticas, como \textit{downtime} das aplicações e congestionamento da rede, são frequentemente tratadas de forma isolada, sem considerar o impacto combinado com o uso de energia limpa. Isso revela a necessidade de soluções que integrem múltiplos critérios, equilibrando sustentabilidade ambiental e eficiência operacional.
+
+A relevância desse estudo é reforçada pelo alinhamento com objetivos globais de sustentabilidade, como os acordos internacionais para reduzir emissões de gases de efeito estufa e metas corporativas de neutralidade de carbono, como reforça \citeonline{nations_emissions_2024}. Empresas de tecnologia líderes, como Google e Microsoft, já sinalizaram o compromisso com práticas sustentáveis, mas a implementação prática dessas metas depende de abordagens técnicas robustas \cite{Google_Microsoft_Climate_Change}.
+
+Portanto, o desenvolvimento de algoritmos eficientes para a migração de VMs em DCs geodistribuídos representa uma contribuição significativa tanto para a pesquisa acadêmica quanto para a prática industrial. Este trabalho busca preencher essas lacunas, propondo soluções que atendam simultaneamente às necessidades ambientais, econômicas e operacionais da computação em nuvem.
 
 \section{Problema de pesquisa}
+Como otimizar a migração de VMs em DCs geodistribuídos para minimizar as emissões de \ch{CO2}, reduzir o \textit{downtime} das aplicações, evitar o congestionamento da rede e maximizar o uso de fontes de energia de baixa intensidade de carbono, considerando as lacunas existentes na padronização de experimentos e na integração de diferentes algoritmos e técnicas?
 
-\section{Proposição de pesquisa}
+\section{Questões de pesquisa}
+\textbf{Q1:} Quais algoritmos ou técnicas de migração existentes de VMs em DCs geodistribuídos são mais eficientes para minimizar as emissões de \ch{CO2}?
+
+\textbf{Q2:} Qual é o ganho quantitativo obtido ao mesclar diferentes algoritmos ou técnicas de migração em termos de redução de emissões de \ch{CO2} e outros critérios relevantes, especialmente em cenários com fontes de energia renováveis?
 
 \section{Objetivos}
+Nesta seção, são definidos os objetivos que guiarão o desenvolvimento e a condução deste trabalho de pesquisa. Primeiramente, o objetivo geral é apresentado, abrangendo a meta principal a ser alcançada com o estudo. Em seguida, os objetivos específicos detalham as metas secundárias que, de forma integrada, contribuem para o atingimento do objetivo geral, fornecendo uma estrutura clara para responder às questões de pesquisa propostas.
 
-\subsection{Objetivos gerais}
+\subsection{Objetivo geral}
+Desenvolver e validar um algoritmo para a migração de VMs em DCs geodistribuídos capaz de minimizar as emissões de \ch{CO2}, reduzir o \textit{downtime} das aplicações, evitar congestionamento de rede e maximizar o uso de fontes de energia de baixa intensidade de carbono.
 
 \subsection{Objetivos específicos}
+\begin{itemize}
+	\item Identificar e analisar os algoritmos e técnicas existentes na literatura, avaliando sua eficiência em minimizar emissões de \ch{CO2} e outros critérios relevantes, como \textit{downtime} e congestionamento de rede, em cenários de DCs geodistribuídos.
+	\item Desenvolver um algoritmo integrado que otimize simultaneamente critérios ambientais, como a redução de emissões de \ch{CO2}, e critérios operacionais, como o tempo de indisponibilidade das aplicações e o congestionamento da rede.
+\end{itemize}
 
 \section{Método de pesquisa}
+O método de pesquisa adotado nesta dissertação baseia-se em simulações computacionais para modelar, implementar e avaliar cenários de migração de máquinas virtuais (VMs) em data centers geodistribuídos. As simulações serão desenvolvidas utilizando o \textit{framework} SimGrid por \citeonline{casanova:hal-01017319}, uma ferramenta amplamente validada pela comunidade científica e utilizada há mais de 20 anos para modelar experimentos de computação distribuída, como plataformas de nuvem. A escolha do SimGrid se justifica pela sua capacidade de modelar com precisão o consumo de energia na execução das tarefas, o processo de ligar e desligar servidores, o uso da rede durante a migração ao vivo, a topologia da rede e o congestionamento da rede. Outro ponto importante para sua escolha é que, apesar de ser possível realizar simulações em nível de pacotes para maior precisão, isso acarretaria um tempo de execução significativamente mais longo. O modelo de nível de fluxo TCP padrão do SimGrid, por outro lado, proporciona resultados precisos em cenários de computação distribuída em larga escala, como o que será utilizado neste trabalho, com milhares de servidores, e em um tempo razoável de execução \cite{velho:hal-00872476}.
+
+Os cenários experimentais serão projetados para refletir ambientes realistas de DCs geodistribuídos, levando em consideração variações nos perfis de carga de trabalho, nas fontes de energia e na topologia da rede. Serão implementados algoritmos existentes para migração de VMs com foco na minimização de \ch{CO2}, \textit{downtime}, congestionamento de rede e otimização do uso de fontes de energia de baixa intensidade de carbono. A implementação buscará garantir a reprodutibilidade dos experimentos e a comparação direta entre as técnicas de migração.
+
+Para considerar o impacto ambiental dos servidores, será utilizada a metodologia proposta por \citeonline{10.1145/3470496.3527408}, que apresenta uma abordagem detalhada para calcular a pegada de carbono dos componentes de \textit{hardware} dos servidores. Essa metodologia inclui o cálculo das emissões relacionadas à fabricação de circuitos integrados de RAM, armazenamento (HDs e SSDs) e CPU. Incorporar esse aspecto permitirá uma análise mais completa das emissões de \ch{CO2}, não apenas durante a operação dos DCs, mas também em seu ciclo de vida completo.
+
+Os testes serão conduzidos utilizando métricas padronizadas para avaliar o desempenho dos algoritmos em relação aos objetivos propostos. Entre as métricas previstas estão: redução de emissão de \ch{CO2}, impacto no \textit{downtime} das aplicações, eficiência no uso da rede e aderência ao uso de energia limpa. A utilização do mesmo simulador e dos mesmos cenários experimentais permitirá a comparação direta entre os algoritmos, identificando suas vantagens e limitações.
+
+Além disso, será investigada a viabilidade e a efetividade de combinar diferentes algoritmos ou técnicas para obter melhores resultados. Essa etapa envolve a análise de sinergias entre as abordagens, buscando estratégias híbridas que aproveitem as vantagens de cada método.
+
+Os resultados obtidos serão analisados criticamente para identificar as condições em que os algoritmos ou combinações propostas apresentam melhor desempenho. A confiabilidade dos resultados será validada por meio de replicações e variações nos cenários experimentais. Por fim, as conclusões serão discutidas em relação às lacunas e limitações apontadas na literatura, destacando as contribuições desta pesquisa e possíveis extensões futuras.
 
 \section{Cronograma proposto}
+O diagrama abaixo apresenta o cronograma de atividades previstas para a realização desta pesquisa, distribuídas entre agosto de 2024 e maio de 2026. As etapas foram organizadas para garantir um desenvolvimento estruturado, permitindo a conclusão antecipada para lidar com possíveis imprevistos.
+
+\begin{centering}
+	\begin{ganttchart}[
+	y unit title=0.5cm,
+	y unit chart=0.8cm,
+	expand chart=\textwidth,
+	hgrid,vgrid,
+	title height=1,
+	bar/.style={fill=gray, rounded corners=3pt},
+	group/.style={fill=black, rounded corners=3pt},
+	bar height=.2,
+	progress label text={},
+	group left shift=0.05,
+	bar left shift=0.05,
+	group height=.3,
+	group peaks width={0.0},
+	inline]{1}{24}
+ 
+   \gantttitle[]{\textbf{2024}}{6}
+   \gantttitle[]{\textbf{2025}}{12}
+   \gantttitle[]{\textbf{2026}}{6}
+
+   \ganttnewline
+   
+   \gantttitle{\textbf{Q3}}{3}
+   \gantttitle{\textbf{Q4}}{3}
+   \gantttitle{\textbf{Q1}}{3}
+   \gantttitle{\textbf{Q2}}{3}
+   \gantttitle{\textbf{Q3}}{3}
+   \gantttitle{\textbf{Q4}}{3}
+   \gantttitle{\textbf{Q1}}{3}
+   \gantttitle{\textbf{Q2}}{3}
+
+   \ganttnewline
+
+   \ganttgroup[inline=false]{Qualificação}{3}{10.5}\\ 
+   \ganttbar[inline=false]{Fundamentação teórica}{1}{3}\\
+   \ganttbar[inline=false]{Trabalhos correlatos}{5}{8}\\
+   \ganttbar[inline=false]{Questões de pesquisa}{3}{5}\\
+   \ganttbar[inline=false]{Problema de pesquisa}{3.5}{5.5}\\
+   \ganttbar[inline=false]{Método de pesquisa}{3}{6}\\
+   \ganttbar[inline=false]{Introdução e Riscos}{4}{6}\\
+   \ganttbar[inline=false]{Objetivo Geral}{5}{7} \\
+   \ganttbar[inline=false]{Objetivos específicos}{5}{7}
+
+   \ganttnewline[ultra thick]
+
+   \ganttgroup[inline=false]{Experimentos}{7}{17}\\
+   \ganttbar[inline=false]{Aperfeiçoamentos}{14}{18}\\
+   \ganttbar[inline=false]{Estado da Arte}{5}{15}
+
+   \ganttnewline[ultra thick]
+   
+   \ganttgroup[inline=false]{Dissertação}{6}{23.5}\\
+   \ganttbar[inline=false]{Releituras}{7}{23}\\ 
+   \ganttbar[inline=false]{Comparativos}{7}{18}
+
+   \ganttvrule[vrule offset=.5]{Qualificação}{11}
+   \ganttvrule[vrule offset=.5]{Defesa da Dissertação}{24.5}
+\end{ganttchart}
+\end{centering}
+
+Na fase inicial, entre agosto e dezembro de 2024, está planejado o desenvolvimento da fundamentação teórica, a análise de trabalhos correlatos, e a formulação das questões de pesquisa e do problema de pesquisa. Durante esse período, também serão definidos os métodos de pesquisa, os objetivos gerais e específicos, bem como a introdução e análise de riscos associados ao trabalho. Paralelamente, inicia-se a elaboração preliminar da dissertação, incorporando os capítulos já desenvolvidos, e as primeiras releituras críticas para garantir consistência.
+
+A partir de janeiro de 2025, inicia-se a segunda fase, com a realização do levantamento do estado da arte até março, proporcionando uma visão abrangente e atualizada sobre os algoritmos e técnicas relacionadas à migração de VMs em DCs geodistribuídos. De janeiro a novembro, serão conduzidos os experimentos, nos quais as técnicas identificadas serão testadas e analisadas sob cenários variados. Paralelamente, os resultados desses experimentos serão utilizados para a escrita contínua da dissertação, que será progressivamente atualizada e revisada com base nos avanços obtidos. Entre julho e janeiro de 2026, serão implementados aperfeiçoamentos nos algoritmos propostos, alinhados aos objetivos de redução de emissões de \ch{CO2} e eficiência operacional.
+
+A terceira fase, de dezembro de 2025 a maio de 2026, será dedicada à consolidação dos resultados comparativos, realizados ao longo do desenvolvimento, com a análise final ocorrendo entre janeiro e março de 2026. Nesse período, o foco estará na finalização e revisão da dissertação, garantindo a integração de todos os capítulos produzidos, bem como na realização de releituras detalhadas para assegurar a coesão do texto e o atendimento aos objetivos da pesquisa. O encerramento está planejado para maio de 2026, três meses antes do prazo final, reservando uma margem de segurança para eventuais ajustes e imprevistos.
 
 \section{Limitações e riscos}
+A pesquisa apresenta algumas limitações e riscos inerentes à natureza do problema e ao método adotado. Um dos principais aspectos é a dependência de simuladores para realizar os testes e comparações dos algoritmos de migração de VMs. Embora simuladores sejam amplamente utilizados na literatura por sua capacidade de modelar cenários complexos de DCs geodistribuídos, eles não capturam de forma completa todas as variáveis e incertezas de ambientes reais. Isso pode limitar a generalização dos resultados para infraestruturas físicas.
+
+Além disso, a rápida evolução tecnológica no setor de computação em nuvem e o surgimento de novos paradigmas podem reduzir a relevância dos resultados obtidos caso novas práticas substituam as tecnologias abordadas.
+
+Essas limitações e riscos serão mitigados, na medida do possível, por meio de uma seleção criteriosa de simuladores e uma análise crítica dos experimentos realizados. Contudo, reconhece-se que os resultados da pesquisa são direcionados a contextos modelados e devem ser avaliados sob essa perspectiva.
+
 
 \section{Estrutura do documento}
+Este trabalho está organizado nos seguintes capítulos. No Capítulo \ref{chapter:fundamentacao-teorica}, apresenta-se os conceitos fundamentais usados no restante deste trabalho ou necessários para o entendimento do mesmo. No Capítulo \ref{chapter:trabalhos-correlatos}, discute-se sobre os trabalhos relacionados que de algum modo se conectam a esta pesquisa, identificando avanços, lacunas e oportunidades. Adicionalmente, o Apêndice \ref{chapter:protocolo-revisao-estado-da-arte} e Apêndice \ref{chapter:resultados-conducao-revisao-estado-da-arte} incluem detalhes complementares, como o protocolo e os resultados da revisão do estado da arte.
 
 \chapter{Fundamentação teórica}\label{chapter:fundamentacao-teorica}
 
@@ -359,7 +476,7 @@ Neste capítulo são apresentados conceitos fundamentais para o leitor entender 
 
 Uma máquina virtual (VM) é um ambiente virtualizado criado pelo hipervisor, também conhecido como monitor de máquina virtual (VMM). O VMM gerencia os recursos físicos do sistema anfitrião (a máquina física) e provisiona múltiplos ambientes virtuais independentes, chamados de convidados. Sua função principal é garantir que essas VMs compartilhem os recursos físicos de forma eficiente, evitando, por exemplo, que a mesma região de memória seja alocada simultaneamente para mais de uma VM. Dessa forma, a VM atua como uma duplicata isolada e eficiente de uma máquina real, permitindo a execução de sistemas operacionais e aplicações de forma independente e segura \cite{10.1145/361011.361073}.
 
-Entre a máquina física e as VMs, há uma camada de software que possibilita a virtualização dos recursos. Essa camada, controlada pelo VMM, permite que as VMs superem as limitações de compatibilidade de hardware e recursos, criando um ambiente mais flexível. Em sistemas tradicionais de virtualização, o VMM opera com os mais altos privilégios, enquanto as VMs funcionam com privilégios reduzidos. Isso garante que o hipervisor possa interceptar e controlar ações que, de outra forma, acessariam ou modificariam componentes críticos do hardware, assegurando o isolamento entre as VMs e a estabilidade do sistema anfitrião. Com essa separação, torna-se possível executar diversos sistemas operacionais ou aplicações simultaneamente em uma única máquina física, o que maximiza o uso dos recursos e melhora a eficiência do ambiente computacional \cite{1430629}.
+Entre a máquina física e as VMs, há uma camada de \textit{software} que possibilita a virtualização dos recursos. Essa camada, controlada pelo VMM, permite que as VMs superem as limitações de compatibilidade de \textit{hardware} e recursos, criando um ambiente mais flexível. Em sistemas tradicionais de virtualização, o VMM opera com os mais altos privilégios, enquanto as VMs funcionam com privilégios reduzidos. Isso garante que o hipervisor possa interceptar e controlar ações que, de outra forma, acessariam ou modificariam componentes críticos do \textit{hardware}, assegurando o isolamento entre as VMs e a estabilidade do sistema anfitrião. Com essa separação, torna-se possível executar diversos sistemas operacionais ou aplicações simultaneamente em uma única máquina física, o que maximiza o uso dos recursos e melhora a eficiência do ambiente computacional \cite{1430629}.
 
 A implementação de tecnologias de virtualização também relaxa as restrições impostas pelo \textit{hardware}, e amplia a flexibilidade do sistema. A virtualização oferece um ambiente abstrato e isolado para a execução de aplicações, o que permite maior escalabilidade e facilita o gerenciamento de recursos. Além disso, existe um vasto conjunto de tecnologias e conceitos que tornam essa abstração possível, proporcionando uma infraestrutura mais adaptável às demandas dinâmicas da computação moderna \cite{10.5555/2531413}.
 
@@ -449,7 +566,7 @@ No contexto desta dissertação, $\alpha$ representa os recursos computacionais 
 %        ilustração etc., aparecer pela primeira vez.
 %
 %-------------------------------------------------------------------------
-\chapter{Protocolo da revisão do estado da arte}
+\chapter{Protocolo da revisão do estado da arte}\label{chapter:protocolo-revisao-estado-da-arte}
 
 \section{Tema da revisão}\label{section:tema-da-revisao}
 
@@ -528,7 +645,7 @@ As Tabelas \ref{tab:TabelaCriteriosInclusao} e \ref{tab:TabelaCriteriosExclusao}
 
 Os artigos selecionados para inclusão foram lidos em completo para extração de resultados. A leitura foi orientada pelas questões de pesquisa (\ref{section:questoes-de-pesquisa}). Durante a leitura, foram copiados trechos de artigos que auxiliavam a responder às questões de pesquisa para controlar planilhas. O conjunto de trechos referentes a cada questão de pesquisa respaldada tanto a elaboração das respostas correspondentes como a reunião dos pontos fortes e pontos fracos do estado da arte em gerenciamento de máquinas virtuais em \textit{datacenters} geodistribuidos com foco em computação sustentável.
 
-\chapter{Resultados da condução da revisão estado da arte}
+\chapter{Resultados da condução da revisão estado da arte}\label{chapter:resultados-conducao-revisao-estado-da-arte}
 
 \section{Relato da condução}\label{section:relato-da-conducao}
 
