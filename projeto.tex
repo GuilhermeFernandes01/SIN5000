@@ -520,6 +520,133 @@ Um dos principais critérios de otimização nesse contexto é o \textit{makespa
 No contexto desta dissertação, $\alpha$ representa os recursos computacionais disponíveis nos servidores dos \textit{data centers}, além de informações sobre a disponibilidade de fontes de energia com menor intensidade de carbono. Já $\beta$ descreve as exigências das VMs, como tempo de execução, prazos, memória e CPU. O critério $\gamma$ é a minimização do consumo de energia proveniente de fontes com alta intensidade de carbono, o que se alinha ao conceito de computação verde.
 
 \chapter{Trabalhos correlatos}\label{chapter:trabalhos-correlatos}
+Este capítulo apresenta a análise do estado da arte relacionada ao tema desta pesquisa. O objetivo da revisão é identificar, avaliar e sintetizar os estudos primários relevantes para responder às questões de pesquisa propostas. As questões tratadas na revisão são: (1) quais são as principais estratégias e algoritmos propostos na literatura para a migração de VMs com foco na redução de emissões de \ch{CO2} em \textit{data centers} geodistribuídos?; (2) quais são os impactos das diferentes técnicas de migração de VMs no \textit{downtime} das aplicações e no congestionamento de rede em ambientes geodistribuídos?; e (3) em que medida a utilização de fontes de energia de baixa intensidade de carbono influencia a eficácia das técnicas de migração para reduzir as emissões de \ch{CO2}?
+
+O método seguido para realizar esta revisão, incluindo os detalhes do protocolo de revisão e sua condução, está descrito nos Apêndices \ref{chapter:protocolo-revisao-estado-da-arte} e \ref{chapter:resultados-conducao-revisao-estado-da-arte}. A revisão aborda a otimização da migração de VMs em DCs geodistribuídos, com o propósito de minimizar o impacto ambiental e melhorar a eficiência operacional. O foco é reduzir as emissões de \ch{CO2}, o \textit{downtime} das aplicações e o congestionamento de rede, além de otimizar o uso de fontes de energia de baixa intensidade de carbono.
+
+\section{Gerenciamento de energia em \textit{data centers} em nuvem}
+
+O consumo de energia em DCs em nuvem tem se tornado uma preocupação crescente devido ao alto custo operacional e ao impacto ambiental associado às emissões de carbono. Diversas pesquisas têm focado em estratégias para otimizar o uso de recursos, reduzir o consumo energético e manter os níveis de Qualidade de Serviço (QoS). Neste capítulo, discutimos abordagens relacionadas ao gerenciamento eficiente de energia em DCs, destacando técnicas de consolidação de VMs, algoritmos heurísticos e impactos na rede.
+
+\subsection{Consolidação dinâmica de VMs e eficiência energética}
+
+A consolidação dinâmica de VMs é uma estratégia amplamente utilizada para reduzir o consumo de energia em DCs. Ao migrar VMs de servidores subutilizados para outros servidores, é possível desligar máquinas físicas ociosas, economizando energia sem comprometer o desempenho das aplicações.
+
+\citeonline{Guo20171335} propuseram métodos adaptativos para consolidação dinâmica de VMs, incluindo detecção de subutilização de \textit{hosts}, seleção de VMs para migração e algoritmos heurísticos baseados na análise de dados históricos. Os experimentos demonstraram redução significativa no consumo de energia e nas violações de SLA, evidenciando a eficácia da abordagem.
+
+De forma similar, \citeonline{Ibrahim202081747} apresentaram o PAPSO, uma técnica baseada em \textit{Particle Swarm Optimization} (PSO) para consolidar VMs dinamicamente. O método busca minimizar o número de \textit{hosts} sobrecarregados e subutilizados, reduzindo a necessidade de migrações e, consequentemente, o consumo energético. Os resultados indicam melhorias em comparação com algoritmos tradicionais, como o \textit{Power-Aware Best Fit Decreasing}.
+
+\citeonline{Al-Dulaimy2018185} abordaram a consolidação dinâmica de VMs, propondo uma abordagem distribuída que utiliza técnicas de limiar dinâmico para detectar \textit{hosts} subutilizados ou sobrecarregados. A estratégia de alocação de VMs é baseada no problema da mochila com múltiplas escolhas, otimizando o uso de recursos físicos e reduzindo o consumo de energia.
+
+\citeonline{Supreeth20221892} apresentaram o VMS-EDMVM, uma abordagem de escalonamento dinâmico de VMs voltada para otimizar a eficiência energética. Utilizando o algoritmo Modified Weighted Linear Regression para detectar \textit{hosts} sobrecarregados e um modelo dinâmico para identificar \textit{hosts} subutilizados, o método reduziu o consumo de energia e as violações de SLA, demonstrando melhorias significativas em relação a abordagens anteriores.
+
+A técnica híbrida KMGA, proposta por \citeonline{AskarizadeHaghighi20191367}, combina o algoritmo \textit{k-means} com um \textit{micro-genetic algorithm} para a consolidação dinâmica de VMs. Os experimentos demonstraram que o KMGA equilibra a redução de energia com o desempenho, minimizando o número de migrações em comparação com outras técnicas híbridas baseadas em PSO e GA.
+
+Além disso, \citeonline{Gharehpasha20211293} propuseram um algoritmo que combina o \textit{Sine–Cosine Algorithm} (SCA) e o \textit{Salp Swarm Algorithm} (SSA) para alocação otimizada de VMs. O objetivo é minimizar o consumo de energia, reduzir o desperdício de recursos e diminuir as violações de SLA, evitando migrações excessivas. Os experimentos realizados com instâncias do Amazon EC2 demonstraram a superioridade do algoritmo em métricas como eficiência energética e utilização de recursos.
+
+\citeonline{Liang2020329} apresentaram o algoritmo MALE (\textit{Memory-Aware Low-Energy}), que considera características de memória e CPU para gerenciar recursos de forma eficiente. O algoritmo prioriza tarefas com base em suas exigências de memória, ajustando a ordem de mapeamento e criação de VMs para reduzir simultaneamente o consumo de energia e os custos dos usuários. Os experimentos mostraram reduções significativas no tempo médio de execução de máquinas físicas e no consumo de energia.
+
+Em ambientes de nuvem federada, \citeonline{Karthikeyan2023} propuseram um algoritmo de migração de VMs para reduzir consumo de energia e emissões de carbono, mantendo a disponibilidade de recursos e maximizando o lucro dos provedores. A abordagem utiliza níveis de sobreutilização e subutilização para realizar migrações dinâmicas, garantindo serviço contínuo mesmo em falhas de VMs. Resultados comparativos demonstraram que a técnica reduz emissões de carbono, consumo de energia e tempos de resposta, além de aumentar a precisão e o lucro em relação a métodos existentes.
+
+\subsection{Algoritmos heurísticos e metaheurísticas para alocação de VMs}
+
+A utilização de algoritmos heurísticos e metaheurísticas tem sido explorada para otimizar a alocação de VMs e reduzir o consumo de energia em DCs.
+
+\citeonline{Chen2012177} apresentaram um algoritmo genético híbrido que considera recursos de CPU, rede e I/O de disco para escalonamento de recursos em nuvem. Embora tenha reduzido a ocupação de máquinas físicas em 30\% a 40\%, o elevado número de migrações de VMs foi identificado como um custo operacional relevante.
+
+\citeonline{DineshReddy20191917} propuseram o MDPSO, uma versão modificada do PSO para alocação inicial de VMs e um algoritmo de seleção baseado em utilização de memória, largura de banda e tamanho das VMs. A abordagem busca otimizar o uso de recursos, reduzir máquinas físicas ativas e minimizar violações de SLA. Os experimentos demonstraram redução no consumo de energia em até 32\%.
+
+O modelo ECO-VMAP, baseado em leilões combinatórios, foi apresentado por \citeonline{Gamsiz202118625}. O modelo permite que os usuários declarem complementaridades e substituibilidades entre VMs em seus lances e utiliza programação linear inteira para otimizar a alocação, minimizando o consumo de energia. Os resultados mostraram aumento nos lucros em 42\% em relação a sistemas FCFS e soluções próximas ao ótimo, dependendo da heurística utilizada.
+
+\citeonline{Tseng2015556} propuseram os algoritmos heurísticos \textit{Tree} e \textit{Forest} para alocação de VMs orientada a serviços. Baseados em programação linear inteira, os algoritmos buscam reduzir custos de comunicação enquanto equilibram carga computacional, promovendo comunicações eficientes em ambientes de larga escala. Os resultados mostraram reduções significativas nos custos de comunicação externa e melhorias na eficiência energética.
+
+\citeonline{Khodayarseresht2023} apresentaram o algoritmo heurístico ECAIVMP para alocação inicial de VMs com foco na eficiência energética e redução de emissões de carbono em DCs geodistribuídos. O algoritmo considera tanto o consumo de energia de TI quanto o de não-TI, otimizando a alocação sem comprometer a qualidade do serviço. Simulações mostraram que o ECAIVMP reduz o consumo de energia em 17\% e as emissões de carbono em 6\%, superando algoritmos concorrentes.
+
+\citeonline{Huang2014902} propuseram dois algoritmos heurísticos dinâmicos de migração e consolidação de VMs para reduzir o consumo de energia e violações de SLA. Utilizando regressão local e programação dinâmica baseada no problema da mochila 0-1, os algoritmos reduziram significativamente o número de migrações, reinicializações de servidores e consumo de energia. Um dos algoritmos destacou-se por atingir o menor nível de violações de SLA.
+
+\subsection{Impactos na nede e estratégias de migração de VMs}
+
+O tráfego de rede e os custos de comunicação são fatores críticos ao considerar a migração de VMs e a alocação de recursos em DCs.
+
+\citeonline{Shahzad2015140} propuseram um algoritmo de escalonamento que minimiza migrações de VMs, reduzindo congestionamento e latência na rede. Ao priorizar VMs com base em categorias, o algoritmo otimiza a utilização de recursos e reduz o overhead da comunicação, melhorando o equilíbrio de carga e minimizando os custos operacionais.
+
+\citeonline{Teyeb2016798} abordaram o escalonamento de migração de VMs em DCs geodistribuídos, considerando o tempo de vida das VMs e o impacto no tráfego da rede backbone. Os resultados mostraram que o tempo de vida das VMs influencia diretamente o número de migrações e a estabilidade do sistema. A solução heurística proposta demonstrou eficácia na redução do tráfego de backbone, mantendo a estabilidade operacional.
+
+\citeonline{Canali201743} propuseram um modelo que integra os impactos energéticos de computação e comunicação, incluindo o custo de migrações. O modelo reduz o consumo de energia ao considerar tanto a transferência de dados quanto a sobrecarga computacional das migrações, alcançando reduções de até 60\% no consumo energético em comparação com abordagens que desconsideram o impacto energético da comunicação.
+
+\citeonline{Ferdaus201765} introduziram o algoritmo NDAP para alocação simultânea de VMs e blocos de dados, visando reduzir custos de comunicação e tráfego de rede. O NDAP mostrou-se eficaz na redução do custo médio de rede em até 67\% e do uso de switches centrais em até 84\%, apesar de sua complexidade quadrática.
+
+\citeonline{Addya20192877} propuseram um \textit{framework} para migração ao vivo de VMs, analisando estratégias de migração serial, paralela e serial aprimorada. Os resultados mostraram que a migração paralela minimiza o \textit{downtime}, enquanto a migração serial aprimorada reduz o tempo total de migração e é mais eficiente em termos de energia. A abordagem oferece insights sobre custos e eficiência em cenários de federação de nuvens.
+
+\citeonline{Satpathy2021} apresentaram uma estratégia de migração serial modificada para múltiplas VMs baseada na técnica de pré-cópia. A abordagem equilibra os estágios de pré-cópia, otimizando o desempenho em aplicações de \textit{big data} com cargas de trabalho variáveis e requisitos de baixa latência. Os resultados mostram que, para aplicações com altas taxas de escrita, a técnica supera significativamente as estratégias paralelas em termos de \textit{downtime}.
+
+\citeonline{Ye2011267} avaliaram a eficiência da migração ao vivo de múltiplas VMs considerando diferentes métodos de reserva de recursos e estratégias avançadas, como migração paralela e consciente de carga. Os resultados mostraram que a reserva de recursos é essencial para evitar falhas e melhorar a eficiência das migrações. A estratégia de migração consciente de carga melhora o desempenho das cargas transferidas.
+
+\citeonline{Vakilinia2018} propuseram uma otimização conjunta do consumo de energia de servidores, comunicação de rede e custos de migração, utilizando um programa quadrático inteiro. A abordagem aplica a técnica de geração de colunas para sistemas maiores, reduzindo significativamente o consumo de energia em comparação com algoritmos heurísticos.
+
+\subsection{Considerações sobre qualidade de serviço}
+
+Manter a qualidade de serviço é essencial ao implementar estratégias de economia de energia. É necessário equilibrar a redução do consumo energético com o cumprimento dos Acordos de Nível de Serviço (SLAs).
+
+\citeonline{Guérout2014225} avaliaram algoritmos de escalonamento utilizando múltiplos parâmetros de QoS, como consumo de energia, tempo de resposta, robustez e dinamismo. Os resultados destacam que algoritmos genéticos podem equilibrar múltiplos objetivos, permitindo otimizações eficientes entre consumo de energia e tempo de resposta. A inclusão de mais métricas na análise revelou diferenças significativas nos resultados, reforçando a importância de uma abordagem multiobjetivo.
+
+\citeonline{Mandal20207374} e \citeonline{Mandal2023651} propuseram políticas de seleção de VMs conscientes de energia para migração, visando reduzir o consumo energético e as emissões de carbono, minimizando violações de SLA. Os resultados mostram que as políticas otimizam a seleção de VMs para migração, equilibrando eficiência energética e manutenção de SLAs.
+
+\citeonline{Supreeth20221892} apresentaram o VMS-EDMVM, já discutido anteriormente, que reduz o consumo de energia e as violações de SLA através de técnicas de detecção de \textit{hosts} sobrecarregados e subutilizados e uma estratégia de escalonamento em duas fases.
+
+\citeonline{Al-Dulaimy2018185}, já mencionado, também destacam a importância de técnicas que consideram a QoS ao propor uma abordagem distribuída para consolidação dinâmica de VMs, utilizando técnicas de limiar dinâmico para superar as limitações de limiares estáticos em cenários de carga imprevisível.
+
+\subsection{Computação em nuvem verde e sustentabilidade ambiental}
+
+A preocupação com a sustentabilidade ambiental tem motivado pesquisas focadas na redução das emissões de carbono em DCs.
+
+\citeonline{Wadhwa20142297} propuseram a técnica CEPM (\textit{Carbon Efficient Placement and Migration}) para reduzir emissões de carbono e consumo de energia. A abordagem utiliza a taxa de pegada de carbono dos DCs geodistribuídos e técnicas de alocação e migração de VMs para otimizar o escalonamento de forma ambientalmente eficiente.
+
+\citeonline{Khosravi2017} desenvolveram algoritmos para migração de VMs entre DCs com o objetivo de aproveitar fontes de energia renovável e reduzir custos. Foram desenvolvidos um algoritmo \textit{offline} com conhecimento total do futuro e dois algoritmos \textit{online}: um determinístico sem previsão e outro \textit{future-aware} com janela de previsão limitada. Os resultados mostram que algoritmos com previsão de disponibilidade de energia renovável podem se aproximar da eficiência de algoritmos com conhecimento total do futuro.
+
+\citeonline{Khodayarseresht2023} apresentaram o algoritmo ECAIVMP, já discutido, focado na alocação inicial de VMs com eficiência energética e redução de emissões de carbono em DCs geodistribuídos. O algoritmo considera o consumo de energia de TI e não-TI, otimizando a alocação sem comprometer a qualidade do serviço.
+
+\citeonline{Xu201987} introduziram o VMSAGE, um algoritmo de escalonamento de VMs inspirado no modelo de gravitação física, que otimiza a eficiência energética ao considerar fatores como repulsão térmica e gravitação lógica entre VMs, \textit{hosts} e \textit{racks}. Os resultados experimentais mostram que o VMSAGE reduz o consumo de energia em 20\% em comparação ao DVFS e em 10\% em relação ao BFH.
+
+\citeonline{Liang2020329} apresentaram o algoritmo MALE, que considera características de memória e CPU para reduzir o consumo de energia e os custos dos usuários, contribuindo para práticas de computação em nuvem verde. O algoritmo prioriza tarefas baseadas em suas exigências de memória, ajustando a ordem de mapeamento de tarefas e a criação de VMs.
+
+\citeonline{More201773} revisaram técnicas e algoritmos relacionados à consolidação de VMs para reduzir o consumo de energia, destacando a importância de parâmetros como servidores, CPUs e dispositivos de rede na eficiência energética. O trabalho propõe uma equação inicial para calcular o consumo energético e sugere explorar métricas como flops/watt para otimizar o uso de recursos e minimizar emissões de \ch{CO2}.
+
+\subsection{Aplicações HPC em ambientes de nuvem}
+
+O suporte a cargas de trabalho de \textit{High-Performance Computing} (HPC) em ambientes de nuvem traz desafios adicionais relacionados à eficiência energética e ao gerenciamento de recursos.
+
+\citeonline{Rodero2012447} propuseram soluções reativas e proativas para gerenciar anomalias térmicas e otimizar a alocação de VMs para cargas HPC. A solução reativa combina migração de VMs, DVFS e \textit{CPU pinning}, enquanto a proativa utiliza perfis de aplicação para maximizar eficiência energética e QoS. Os experimentos demonstraram reduções de 12\% no consumo de energia e 18\% no tempo de execução das aplicações.
+
+\citeonline{Ye2011267}, já mencionados, avaliaram a eficiência da migração ao vivo de múltiplas VMs, o que é relevante para cargas HPC que exigem alta disponibilidade e desempenho. Os resultados mostram que a migração ao vivo gera sobrecargas de desempenho que variam conforme o tamanho da memória, recursos de CPU e tipo de carga de trabalho.
+
+\subsection{Heurísticas e técnicas de migração avançadas}
+
+Diversas pesquisas focaram em aprimorar as técnicas de migração de VMs para melhorar a eficiência energética e o desempenho.
+
+\citeonline{Mishra201234} exploraram o papel essencial da migração ao vivo de VMs no gerenciamento dinâmico de recursos, destacando sua importância para consolidação, balanceamento de carga e mitigação de hotspots. O estudo categoriza as heurísticas de migração com base nos componentes principais do processo: quando migrar, qual VM migrar e para onde migrar.
+
+\citeonline{Sun2018279} apresentaram o algoritmo VDC-M para migração de múltiplas VMs correlacionadas, otimizando o desempenho da migração em termos de custo de remapeamento e \textit{downtime}. Os resultados experimentais mostram que o VDC-M supera o algoritmo benchmark VDC-SM em eficiência de remapeamento e redução de \textit{downtime}.
+
+\citeonline{Huang2014902} propuseram algoritmos heurísticos para migração e consolidação de VMs, já discutidos, que reduziram significativamente o número de migrações e o consumo de energia, além de atingir menor nível de violações de SLA.
+
+\citeonline{Tseng2015556} apresentaram os algoritmos \textit{Tree} e \textit{Forest}, já mencionados, que buscam reduzir custos de comunicação e equilibrar a carga computacional. O algoritmo \textit{Tree} reduziu os custos de comunicação externa em 92\%, enquanto o \textit{Forest} diminuiu esses custos em 22\%.
+
+\citeonline{Addya20192877} propuseram um \textit{framework} para migração ao vivo de VMs, analisando diferentes estratégias e oferecendo insights sobre custos e eficiência em cenários de federação de nuvens. A migração serial aprimorada mostrou-se eficiente em termos de energia.
+
+\subsection{Redução de consumo de energia em \textit{data centers} federados}
+
+Em ambientes de nuvem federada, estratégias específicas são necessárias para otimizar o consumo de energia.
+
+\citeonline{Karthikeyan2023}, já discutido, propuseram um algoritmo de migração de VMs que reduz o consumo de energia e as emissões de carbono, mantendo a disponibilidade de recursos e maximizando o lucro dos provedores. A abordagem utiliza categorização de DCs baseada em MIPS e custos antes da alocação de tarefas, otimizando o uso de recursos.
+
+\citeonline{Satpathy2021}, já mencionado, apresentaram uma estratégia de migração eficiente para múltiplas VMs, relevante para ambientes federados que exigem baixa latência e migrações eficientes. A solução é eficaz para cenários em que baixa latência e migrações eficientes são cruciais.
+
+\section{Considerações Finais}
+
+A otimização do consumo de energia em DCs em nuvem é um desafio multidimensional que envolve balancear eficiência energética, qualidade de serviço e desempenho operacional. As pesquisas discutidas neste capítulo abordam diferentes aspectos desse problema, desde a consolidação dinâmica de VMs e o uso de algoritmos heurísticos até considerações sobre impactos na rede e sustentabilidade ambiental.
+
+Estratégias que combinam técnicas de migração eficiente, alocação inteligente de recursos e consideração de múltiplos parâmetros de desempenho mostram-se promissoras para alcançar DCs mais sustentáveis e eficientes. No entanto, é necessário continuar explorando novas abordagens que integrem avanços tecnológicos, como fontes de energia renovável e técnicas de aprendizado de máquina, para aprimorar ainda mais a gestão de recursos em ambientes de computação em nuvem.
 
 % ----------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS
